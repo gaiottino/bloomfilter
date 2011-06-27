@@ -8,8 +8,14 @@ module Jar
 end
 
 class Bloomfilter
-  def initialize(max_elements, bit_set_size)
-    @filter = Jar::BloomFilter.new(bit_set_size, max_elements)
+  def initialize(options = {})
+    if options[:size] && options[:false_positive_percentage]
+      @filter = Jar::BloomFilter.new(options[:false_positive_percentage], options[:size])
+    elsif options[:filter]
+      @filter = options[:filter]
+    else
+      raise 'Initialize need either :filter or :size AND :false_positive_percentage'
+    end
   end
   
   def << (k)
@@ -22,5 +28,17 @@ class Bloomfilter
   
   def count
     @filter.count
+  end
+  
+  def store(file_path)
+    File.open(file_path, 'w') do |file|
+      Marshal.dump(@filter, file)
+    end
+  end
+  
+  def self.load(file_path)
+    File.open(file_path, 'r') do |file|
+      return new(:filter => Marshal.load(file))
+    end
   end
 end
