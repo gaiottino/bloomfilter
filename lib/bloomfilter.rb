@@ -22,6 +22,12 @@ module Bloomfilter
     def << (k)
       @filter.add(k)
     end
+    
+    def add_if_absent(k)
+      @filter.synchronized do
+        @filter.add(k) unless @filter.contains(k)
+      end
+    end
   
     def include?(k)
       @filter.contains(k)
