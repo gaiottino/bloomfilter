@@ -6,7 +6,7 @@ Dir['ext/*.jar'].each { |jar| require jar }
 
 Gem::Specification.new do |s|
   s.name        = 'jruby-bloomfilter'
-  s.version     = '1.0.1'
+  s.version     = '1.0.3'
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Daniel Gaiottino']
   s.email       = ['daniel@burtcorp.com']
@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.description = %q{JRuby wrapper (+ some extra functionality) to http://code.google.com/p/java-bloomfilter}
 
   s.rubyforge_project = 'jruby-bloomfilter'
-  s.add_dependency 'jets3t-rb', '~> 1.0.0'
+  s.add_dependency 'jets3t-rb'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
