@@ -3,10 +3,7 @@ module Bloomfilter
     class File
       def store(path, filter)
         dir = ::File.dirname(path)
-        p path
-        p dir
         unless ::File.directory?(dir)
-          p "Creating #{dir}"
           %x(mkdir -p #{dir})
         end
         

@@ -8,9 +8,6 @@ module Bloomfilter
       TEMP_FILE_PREFIX = 'bloomfilter'.freeze
     
       def initialize(s3_service, bucket_name)
-        # raise 'Bucket needs to be specified with :bucket option' unless options[:bucket]
-        # raise "#{AWS_SECRET_PATH} not found" unless ::File.exist?(::File.expand_path(AWS_SECRET_PATH))
-
         @file_serializer = File.new
         @bucket = s3_service.bucket(bucket_name)
       end
