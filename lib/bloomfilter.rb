@@ -6,6 +6,7 @@ require 'ext/java-bloomfilter-0.9.3'
 require_relative 'bloomfilter/serializer'
 
 module Jar
+  import java.util.concurrent.locks.ReentrantLock
   import com.skjegstad.utils.BloomFilter
 end
 
@@ -17,24 +18,34 @@ module Bloomfilter
       elsif options[:filter]
         @filter = options[:filter]
       end
+      
+      @lock = Jar::ReentrantLock.new
     end
   
     def << (k)
+      lock
       @filter.add(k)
+    ensure
+      unlock
     end
     
-    def add_if_absent(k)
-      @filter.synchronized do
-        @filter.add(k) unless @filter.contains(k)
-      end
-    end
-  
     def include?(k)
+      lock
       @filter.contains(k)
+    ensure
+      unlock
     end
   
     def count
       @filter.count
+    end
+    
+    def lock
+      @lock.lock
+    end
+    
+    def unlock
+      @lock.unlock
     end
     
   end
