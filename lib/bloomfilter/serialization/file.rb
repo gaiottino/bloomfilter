@@ -6,9 +6,18 @@ module Bloomfilter
         unless ::File.directory?(dir)
           %x(mkdir -p #{dir})
         end
+
+        unless ::File.directory?(dir)
+          $stderr.puts "Unable to create the directory #{dir}. Trying again."
+          %x(mkdir -p #{dir})
+        end        
         
-        ::File.open(path, 'w') do |f|
-          Marshal.dump(filter, f)
+        unless ::File.directory?(dir)
+          $stderr.puts "#{dir} still doesn't exist. Giving up for now."
+        else
+          ::File.open(path, 'w') do |f|
+            Marshal.dump(filter, f)
+          end
         end
       end
 
