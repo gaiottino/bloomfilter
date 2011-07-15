@@ -11,12 +11,23 @@ module Bloomfilter
       @filter << 'hello'
       @filter << 'world'
       @path = Tempfile.new('bloomfilter').path
+      %x(rm -rf /tmp/bloomfilter_spec)
+      @path2 = "/tmp/bloomfilter_spec/test1/test2/test3"
     end
   
     context 'File' do
       it 'should be possible to store a filter to a file' do
         Serializer.file.store(@path, @filter)
-        File.new(@path).size.should == 1612
+        File.new(@path).size.should > 0
+      end
+      
+      it 'should create a recursive directory for storing stuff' do
+        1000.times do | i |
+          filename = @path2 + "/test#{i}/staticdir/filter"
+          Serializer.file.store(filename, @filter)
+          f = File.new(filename)
+          f.size.should > 0
+        end
       end
 
       it 'should be possible to load a filter from a file' do
