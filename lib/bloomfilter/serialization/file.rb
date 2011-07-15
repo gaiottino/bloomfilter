@@ -1,15 +1,25 @@
+require 'fileutils'
+
 module Bloomfilter
   module Serialization
     class File
       def store(path, filter)
         dir = ::File.dirname(path)
         unless ::File.directory?(dir)
-          %x(mkdir -p #{dir})
+          begin
+            FileUtils.mkdir_p(dir)
+          rescue => e
+            $strerr.puts "Exception raised when trying to create directory: #{path} - #{e.message}"
+          end
         end
 
         unless ::File.directory?(dir)
           $stderr.puts "Unable to create the directory #{dir}. Trying again."
-          %x(mkdir -p #{dir})
+          begin
+            FileUtils.mkdir_p(dir)
+          rescue => e
+            $strerr.puts "Exception raised when trying to create directory: #{path} - #{e.message}"
+          end
         end        
         
         unless ::File.directory?(dir)
