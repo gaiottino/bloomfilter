@@ -6,10 +6,10 @@ Dir['ext/*.jar'].each { |jar| require jar }
 
 Gem::Specification.new do |s|
   s.name        = 'jruby-bloomfilter'
-  s.version     = '1.0.5'
+  s.version     = '1.0.6'
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ['Daniel Gaiottino']
-  s.email       = ['daniel@burtcorp.com']
+  s.authors     = ['Daniel Gaiottino', 'David Tollmyr']
+  s.email       = ['daniel@burtcorp.com', 'david@burtcorp.com']
   s.homepage    = 'http://github.com/gaiottino/bloomfilter'
   s.summary     = %q{JRuby wrapper for java-bloomfilter}
   s.description = %q{JRuby wrapper (+ some extra functionality) to http://code.google.com/p/java-bloomfilter}
