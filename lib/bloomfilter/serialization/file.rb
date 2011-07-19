@@ -38,8 +38,8 @@ module Bloomfilter
           @loaded_file = Marshal.load(f)
         end
         @loaded_file
-      rescue => e
-        $stderr.puts "Exception deserializing file. #{e.message}"
+      rescue Exception => e
+        raise e unless File.new(path).size == 0
       end
       
     private
