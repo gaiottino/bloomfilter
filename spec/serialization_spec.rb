@@ -20,7 +20,15 @@ module Bloomfilter
         Serializer.file.store(@path, @filter)
         File.new(@path).size.should > 0
       end
-      
+
+      it 'should be possible to load a filter from a file' do
+        filter = Serializer.file.load(@path)
+        filter.count.should == 2
+        filter.include?('hello').should be_true
+        filter.include?('world').should be_true
+        filter.include?('bloomfilter').should be_false
+      end
+
       it 'should create a recursive directory for storing stuff' do
         1000.times do | i |
           filename = @path2 + "/test#{i}/staticdir/filter"
@@ -30,13 +38,6 @@ module Bloomfilter
         end
       end
 
-      it 'should be possible to load a filter from a file' do
-        filter = Serializer.file.load(@path)
-        filter.count.should == 2
-        filter.include?('hello').should be_true
-        filter.include?('world').should be_true
-        filter.include?('bloomfilter').should be_false
-      end
     end
   
     context 'S3' do
