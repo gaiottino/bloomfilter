@@ -35,11 +35,13 @@ module Bloomfilter
         return nil unless ::File.exist?(path)
         
         ::File.open(path, 'r') do |f|
-          @loaded_file = Marshal.load(f)
+          begin
+            @loaded_file = Marshal.load(f) unless f.size == 0
+          rescue => e
+            @loaded_file = nil
+          end
         end
         @loaded_file
-      rescue Exception => e
-        raise e unless ::File.new(path).size == 0
       end
       
     private
