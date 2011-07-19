@@ -9,7 +9,7 @@ module Bloomfilter
           begin
             FileUtils.mkdir_p(dir)
           rescue => e
-            $strerr.puts "Exception raised when trying to create directory: #{path} - #{e.message}"
+            $stderr.puts "Exception raised when trying to create directory: #{path} - #{e.message}"
           end
         end
 
@@ -18,7 +18,7 @@ module Bloomfilter
           begin
             FileUtils.mkdir_p(dir)
           rescue => e
-            $strerr.puts "Exception raised when trying to create directory: #{path} - #{e.message}"
+            $stderr.puts "Exception raised when trying to create directory: #{path} - #{e.message}"
           end
         end        
         
