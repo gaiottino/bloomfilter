@@ -39,7 +39,7 @@ module Bloomfilter
         end
         @loaded_file
       rescue Exception => e
-        raise e unless File.new(path).size == 0
+        raise e unless ::File.new(path).size == 0
       end
       
     private
