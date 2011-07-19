@@ -35,8 +35,11 @@ module Bloomfilter
         return nil unless ::File.exist?(path)
         
         ::File.open(path, 'r') do |f|
-          return Marshal.load(f)
+          @loaded_file = Marshal.load(f)
         end
+        @loaded_file
+      rescue => e
+        $stderr.puts "Exception deserializing file. #{e.message}"
       end
       
     private
