@@ -36,6 +36,7 @@ module Bloomfilter
 
       def load(path)
         s3_object = @bucket.get(path)
+        return nil if s3_object.nil?
         tmp = Tempfile.new(TEMP_FILE_PREFIX)
         begin
           ::File.open(tmp.path, 'w') do |f|
