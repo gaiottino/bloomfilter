@@ -21,16 +21,24 @@ module Bloomfilter
         rescue Exception => e
           $stderr.puts "Exception when storing to S3 #{e.message}"
           $stderr.puts e.backtrace
+        ensure
+          tmp.close
+          tmp.unlink
         end
       end
 
       def load(path)
         s3_object = @bucket.get(path)
         tmp = Tempfile.new(TEMP_FILE_PREFIX)
-        ::File.open(tmp.path, 'w') do |f|
-          f << s3_object.data
+        begin
+          ::File.open(tmp.path, 'w') do |f|
+            f << s3_object.data
+          end
+          @file_serializer.load(tmp.path)
+        ensure
+          tmp.close
+          tmp.unlink
         end
-        @file_serializer.load(tmp.path)
       end
     end
   end
