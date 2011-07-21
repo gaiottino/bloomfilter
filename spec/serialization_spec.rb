@@ -73,6 +73,8 @@ module Bloomfilter
         s3_service = JetS3t::RestS3Service.new(credentials)
         @s3 = Serialization::S3.new(s3_service, @bucket_name)
         @store_path = "/path/rspec_store_test.bin"
+        bucket = s3_service.bucket(@bucket_name)
+        bucket.delete(@store_path)
       end
     
       it 'should be possible to store and load a filter from S3' do
