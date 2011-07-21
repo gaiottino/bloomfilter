@@ -12,15 +12,22 @@ module Bloomfilter
         @bucket = s3_service.bucket(bucket_name)
       end
     
-      def store(path, filter)
+      def store_file(path, file_path)
         begin
-          tmp = Tempfile.new(TEMP_FILE_PREFIX)
+          file = ::File.new(file_path)
           path.slice!(0) if path[0] == '/'
-          @file_serializer.store(tmp.path, filter)
-          @bucket.put(path, tmp)
+          @bucket.put(path, file)
         rescue Exception => e
           $stderr.puts "Exception when storing to S3 #{e.message}"
           $stderr.puts e.backtrace
+        end
+      end
+      
+      def store(path, filter)
+        begin
+          tmp = Tempfile.new(TEMP_FILE_PREFIX)
+          @file_serializer.store(tmp.path, filter)
+          store_file(path, tmp.path)
         ensure
           tmp.close
           tmp.unlink
