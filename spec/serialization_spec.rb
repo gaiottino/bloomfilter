@@ -40,7 +40,7 @@ module Bloomfilter
 
     end
   
-    context 'S3' do
+    context 'S3 stubbed' do
       before do
         bucket_name = 'test-bucket'
         s3_service = stub('s3_service')
@@ -50,17 +50,38 @@ module Bloomfilter
         @s3 = Serialization::S3.new(s3_service, bucket_name)
       end
     
-      it 'should be possible to store a filter to S3' do
-        @bucket.should_receive(:put).with('/some/path', anything)
+      it 'should send serialized file to S3 and strip leading /' do
+        @bucket.should_receive(:put).with('some/path', anything)
         @s3.store('/some/path', @filter)
       end
     
-      it 'should be possible to load a filter from S3' do
+      it 'should try and get serialized file from S3' do
         s3_object = stub('s3_object')
         @bucket.should_receive(:get).with('/some/path').and_return(s3_object)
         s3_object.should_receive(:data).and_return(Marshal.dump(@filter))
         @s3.load('/some/path')
       end
     end
+    
+    context 'S3' do
+      before do
+        aws_secret_path = '~/.awssecret'.freeze
+        raise "#{aws_secret_path} not found" unless File.exist?(File.expand_path(aws_secret_path))
+        access_key_id, secret_access_key = File.readlines(File.expand_path(aws_secret_path)).map(&:chomp)
+        @bucket_name = 'test-bucket-12345'
+        credentials = JetS3t::AWSCredentials.new(access_key_id, secret_access_key)
+        s3_service = JetS3t::RestS3Service.new(credentials)
+        @s3 = Serialization::S3.new(s3_service, @bucket_name)
+        @store_path = "/path/rspec_store_test.bin"
+      end
+    
+      it 'should be possible to store and load a filter from S3' do
+        @s3.store(@store_path, @filter)
+        filter = @s3.load(@store_path)
+        filter.include?('hello').should be_true
+        filter.include?('world').should be_true
+        filter.include?('bloomfilter').should be_false
+      end
+    end    
   end
 end
