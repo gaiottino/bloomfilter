@@ -1,6 +1,6 @@
 GIT
   remote: git@github.com:effata/jets3t-rb.git
-  revision: 9a1abe7a56ef7e2a3a0cd05b4cc4d18ab1e2442f
+  revision: 8386711d482d4bf8cb11b27afd74113560a11776
   specs:
     jets3t-rb (1.0.2)
 
