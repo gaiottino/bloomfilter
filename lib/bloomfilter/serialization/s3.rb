@@ -25,27 +25,18 @@ module Bloomfilter
       
       def store(path, filter)
         begin
-          tmp = Tempfile.new(TEMP_FILE_PREFIX)
-          @file_serializer.store(tmp.path, filter)
-          store_file(path, tmp.path)
-        ensure
-          tmp.close
-          tmp.unlink
+          data = Marshal.dump(filter).to_java_bytes
+          @bucket.put_data(path, data)
         end
       end
 
       def load(path)
         s3_object = @bucket.get(path)
         return nil if s3_object.nil?
-        tmp = Tempfile.new(TEMP_FILE_PREFIX)
         begin
-          ::File.open(tmp.path, 'w') do |f|
-            f << s3_object.data
-          end
-          @file_serializer.load(tmp.path)
-        ensure
-          tmp.close
-          tmp.unlink
+          @loaded_file = Marshal.load(s3_object.data)
+        rescue Exception => e
+          nil
         end
       end
     end
