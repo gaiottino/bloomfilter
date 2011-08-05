@@ -51,7 +51,7 @@ module Bloomfilter
       end
     
       it 'should send serialized file to S3 and strip leading /' do
-        @bucket.should_receive(:put).with('some/path', anything)
+        @bucket.should_receive(:put_data)
         @s3.store('/some/path', @filter)
       end
     
