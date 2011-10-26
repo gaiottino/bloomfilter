@@ -4,7 +4,6 @@ require 'java'
 require 'ext/java-bloomfilter-0.9.3'
 
 require_relative 'bloomfilter/serializer'
-require_relative 'bloomfilter/bucket_group'
 
 module Jar
   import java.util.concurrent.locks.ReentrantLock
