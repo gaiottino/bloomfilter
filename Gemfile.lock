@@ -1,13 +1,8 @@
-GIT
-  remote: git@github.com:effata/jets3t-rb.git
-  revision: effcd8d068d5256208213383d964d6992caeee91
-  specs:
-    jets3t-rb (1.0.2)
-
 GEM
   remote: http://rubygems.org/
   specs:
     diff-lcs (1.1.2)
+    jets3t-rb (1.0.3)
     rspec (2.6.0)
       rspec-core (~> 2.6.0)
       rspec-expectations (~> 2.6.0)
@@ -22,5 +17,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  jets3t-rb!
+  jets3t-rb
   rspec
