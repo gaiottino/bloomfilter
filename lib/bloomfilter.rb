@@ -12,6 +12,8 @@ end
 
 module Bloomfilter
   class Bloomfilter
+    attr_accessor :recently_loaded
+    
     def initialize(options = {})
       if options[:size] && options[:false_positive_percentage]
         @filter = Jar::BloomFilter.new(options[:false_positive_percentage], options[:size])
@@ -20,6 +22,7 @@ module Bloomfilter
       end
       
       @lock = Jar::ReentrantLock.new
+      @recently_loaded = true
     end
   
     def << (k)
